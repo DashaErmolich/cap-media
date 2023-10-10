@@ -1,0 +1,111 @@
+### Requires REST Client for VS Code
+### https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+###
+### Edit your settings.json and add the configuration from rest-client-config.json for local tests
+@entity = MediaFile
+@server = http://localhost:4004
+### Read Enititysets
+GET {{server}}/media/
+
+### Read Pictures
+# curl http://localhost:4004/media/MediaFile | jq
+GET {{server}}/media/{{entity}}
+
+###
+GET {{server}}/media/MediaFile(1)/content
+
+### Create Picture
+# curl -X POST http://localhost:4004/media/Pictures -H "Accept: application/json" -H "Content-Type: application/json" --data '{ "ID": "da07ae51-d0d3-41e7-a737-2555a213e5a9", "mediatype": "image/png" }'
+# Without providing the attribute mediatype the download will send back
+# content-type: application/octet-stream
+# which is different to what is documented at:
+# https://cap.cloud.sap/docs/guides/generic-providers#media-data
+POST {{server}}/media/{{entity}}
+Accept: application/json
+Content-Type: application/json
+
+{ 
+  
+}
+
+### Upload Binary
+# curl -X PUT "http://localhost:4004/media/Pictures(da07ae51-d0d3-41e7-a737-2555a213e5a9)/content" -H "image/png" --data-binary @./srv/tests/Test.png
+# [ <Buffer 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 01 2c 00 00 01 2c 08 06 00 00 00 79 7d 8e 75 00 00 00 01 73 52 47 42 00 ae ce 1c e9 00 00 00 06 ... >
+PUT {{server}}/media/{{entity}}(1)/content
+Content-Type: image/png
+
+< ./Test.png
+### Upload Binary
+# curl -X PUT "http://localhost:4004/media/Pictures(da07ae51-d0d3-41e7-a737-2555a213e5a9)/content" -H "image/png" --data-binary @./srv/tests/Test.png
+# [ <Buffer 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 01 2c 00 00 01 2c 08 06 00 00 00 79 7d 8e 75 00 00 00 01 73 52 47 42 00 ae ce 1c e9 00 00 00 06 ... >
+PUT {{server}}/media/{{entity}}(de0be009-0850-45a8-aa85-4634ef69d712)/content
+Content-Type: text/csv
+
+< ./data.csv
+
+###
+POST {{server}}/media/{{entity}}
+Accept: application/json
+Content-Type: application/json
+
+{ 
+  
+}
+
+### Upload Binary
+# curl -X PUT "http://localhost:4004/media/Pictures(da07ae51-d0d3-41e7-a737-2555a213e5a9)/content" -H "image/png" --data-binary @./srv/tests/Test.png
+# [ <Buffer 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 01 2c 00 00 01 2c 08 06 00 00 00 79 7d 8e 75 00 00 00 01 73 52 47 42 00 ae ce 1c e9 00 00 00 06 ... >
+PUT {{server}}/media/{{entity}}(80ea2121-55e2-4149-9f3e-9efe247e7492)/content
+Content-Type: application/pdf
+
+< ./Booking.com_ Confirmation_Cyprys (2).pdf
+
+### Upload Binary
+# curl -X PUT "http://localhost:4004/media/Pictures(da07ae51-d0d3-41e7-a737-2555a213e5a9)/content" -H "image/png" --data-binary @./srv/tests/Test.png
+# [ <Buffer 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 01 2c 00 00 01 2c 08 06 00 00 00 79 7d 8e 75 00 00 00 01 73 52 47 42 00 ae ce 1c e9 00 00 00 06 ... >
+PATCH {{server}}/media/{{entity}}(95470132-5d42-4f79-a8f9-beecc3b0b184)
+Content-Type: application/json
+
+{
+  "fileName" : "data.csv"
+}
+
+### Create Picture in one request
+# curl -v http://localhost:4004/media/Pictures -F file0=@./srv/tests/Test.png json='{ "ID": "da07ae51-d0d3-41e7-a737-2555a213e5a9" }' 
+# This results in the following eror:
+# {"error":{"code":null,"message":"No payload deserializer available for resource kind 'ENTITY' and mime type 'multipart/form-data'"}}* Rebuilt URL to: json= "ID": "da07ae51-d0d3-41e7-a737-2555a213e5a9"
+
+### Read Binary
+# curl "http://localhost:4004/media/Pictures(da07ae51-d0d3-41e7-a737-2555a213e5a9)/content"
+GET {{server}}/media/{{entity}}
+
+### Upload using CustomFileUploader
+# [ <Buffer 2d 2d 2d 2d 2d 2d 57 65 62 4b 69 74 46 6f 72 6d 42 6f 75 6e 64 61 72 79 70 71 65 32 42 64 47 42 6e 74 77 72 32 64 31 58 0d 0a 43 6f 6e 74 65 6e 74 2d ... >
+GET http://localhost:4004/media/Pictures(68b593fd-fb02-4ce7-9a58-35f1ff92606e)/content
+
+### Delete Image
+# curl -X DELETE "http://localhost:4004/media/Pictures(da07ae51-d0d3-41e7-a737-2555a213e5a9)"
+DELETE {{server}}/media/{{entity}}(da07ae51-d0d3-41e7-a737-2555a213e5a9) 
+
+### Create Picture JPEG
+# with mediatype provided the reading will work
+POST {{server}}/media/{{entity}}
+Accept: application/json
+Content-Type: application/json
+
+{ 
+  "ID": "da07ae51-d0d3-41e7-a737-2555a213e5a8",
+  "mediatype": "image/jpeg" 
+}
+
+### Upload Binary JPEG
+PUT {{server}}/media/{{entity}}(da07ae51-d0d3-41e7-a737-2555a213e5a8)/content
+Content-Type: image/jpeg
+
+< ./Test.jpg
+
+### Read Binary JPEG
+GET {{server}}/media/{{entity}}(da07ae51-d0d3-41e7-a737-2555a213e5a8)/content
+
+### Delete Image JPEG
+DELETE {{server}}/media/{{entity}}(da07ae51-d0d3-41e7-a737-2555a213e5a8) 

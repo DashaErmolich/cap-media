@@ -1,0 +1,17 @@
+{
+  "model/models-dbg.js": 1696599918888,
+  "model/models.js": 1696599918888,
+  "manifest.json": 1696601889864,
+  "controller/FileUploader.controller.js": 1696601679534,
+  "controller/App.controller.js": 1696599918892,
+  "Component.js": 1696599918880,
+  "Component-preload.js": 1696601890175,
+  "Component-dbg.js": 1696599918880,
+  "controller/FileUploader-dbg.controller.js": 1696601679534,
+  "controller/App-dbg.controller.js": 1696599918892,
+  "i18n/i18n.properties": 1696599918884,
+  "view/FileUploader.view.xml": 1696600387361,
+  "view/App.view.xml": 1696599918896,
+  "css/style.css": 1696599918892,
+  "index.html": 1696599918884
+}

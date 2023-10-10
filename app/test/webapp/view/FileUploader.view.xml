@@ -1,0 +1,42 @@
+<mvc:View
+    controllerName="test.controller.FileUploader"
+    xmlns:l="sap.ui.layout"
+    xmlns:u="sap.ui.unified"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    class="viewPadding"
+    displayBlock="true"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <content>
+            <FlexBox
+                direction="Column"
+                class="sapUiLargeMargin"
+            >
+                <Label
+                    text="Attach File"
+                    labelFor="fileUploader"
+                    required="true"
+                />
+                <u:FileUploader
+                    id="__fileUploader"
+                    tooltip="Upload your file to DB"
+                    change="onFileChange"
+                />
+                <Button
+                    text="Upload"
+                    press="onUploadFile"
+                    type="Emphasized"
+                />
+                <Image
+                    ariaDetails="detailsActiveImage"
+                    src="media_srv/v2/media/MediaFile(1)/content"
+                    decorative="false"
+                />
+            </FlexBox>
+        </content>
+    </Page>
+</mvc:View>
